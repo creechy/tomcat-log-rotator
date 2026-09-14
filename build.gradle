@@ -1,0 +1,60 @@
+plugins {
+    id 'java'
+    id 'com.diffplug.spotless' version '8.10.1'
+    id 'com.gradleup.shadow' version '9.5.1'
+}
+
+group = 'org.fakebelieve'
+version = '1.0-SNAPSHOT'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+repositories {
+    mavenCentral()
+}
+
+def tomcatVersion = '9.0.121'
+
+dependencies {
+    compileOnly "org.apache.tomcat:tomcat-catalina:${tomcatVersion}"
+    compileOnly "org.apache.tomcat:tomcat-coyote:${tomcatVersion}"
+    compileOnly "org.apache.tomcat:tomcat-util:${tomcatVersion}"
+
+    implementation 'it.sauronsoftware.cron4j:cron4j:2.2.5'
+
+    testImplementation platform('org.junit:junit-bom:6.0.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+
+
+jar {
+    enabled = true
+    archiveClassifier.set('plain')
+}
+
+spotless {
+    format 'misc', {
+        target '*.gradle', '*.md', '.gitignore'
+        trimTrailingWhitespace()
+        leadingTabsToSpaces(2)
+        endWithNewline()
+    }
+    java {
+        target "src/**/*.java"
+        palantirJavaFormat()
+    }
+}
+
+shadowJar {
+    // Relocate cron4j to avoid conflicts on the classpath, and explicitly exclude our own packages from being scanned/remapped
+    relocate 'it.sauronsoftware.cron4j', 'shaded.it.sauronsoftware.cron4j'
+}
+
+artifacts {
+    runtimeOnly shadowJar
+}
