@@ -3,11 +3,11 @@
 `tomcat-log-rotator` is a Tomcat lifecycle listener that rotates every
 [`AccessLogValve`](https://tomcat.apache.org/tomcat-9.0-doc/api/org/apache/catalina/valves/AccessLogValve.html)
 configured below a Tomcat Engine on a cron schedule. It's useful to force
-access logs to be rotated at or before some specific period, for example, 
+access logs to be rotated at or before some specific period, for example,
 to ensure all logs are available for external log processing frameworks.
 
 This isn't typically necessary, but there are low volume virtual hosts, there
-is no guarantee that their access logs will be rotated when necessary, as 
+is no guarantee that their access logs will be rotated when necessary, as
 built-in log rotation occurs as access log entries are written.
 
 The listener recursively scans the Engine, Hosts, and Contexts when the Engine
