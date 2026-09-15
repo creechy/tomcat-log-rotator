@@ -18,7 +18,7 @@ public class PeriodicAccessLogRotator implements LifecycleListener {
     private static final Log log = LogFactory.getLog(PeriodicAccessLogRotator.class);
 
     private Scheduler scheduler;
-    private String cronExpression = "0 * * * *"; // Default: top of every hour
+    private String cronExpression = "5 0 * * *"; // Default: just after midnight
 
     public void setCronExpression(String cronExpression) {
         this.cronExpression = cronExpression;

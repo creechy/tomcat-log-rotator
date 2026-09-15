@@ -80,7 +80,7 @@ Examples:
 | Every 15 minutes | `*/15 * * * *` |
 | Every Monday at 02:30 | `30 2 * * 1` |
 
-If omitted, `cronExpression` defaults to `0 * * * *`.
+If omitted, `cronExpression` defaults to `5 0 * * *`.
 
 ## Notes
 
