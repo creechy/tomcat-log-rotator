@@ -1,10 +1,8 @@
 package org.fakebelieve.tomcat;
 
 import it.sauronsoftware.cron4j.Scheduler;
-
 import java.util.HashSet;
 import java.util.Set;
-
 import org.apache.catalina.Container;
 import org.apache.catalina.Engine;
 import org.apache.catalina.Lifecycle;
@@ -12,8 +10,12 @@ import org.apache.catalina.LifecycleEvent;
 import org.apache.catalina.LifecycleListener;
 import org.apache.catalina.Valve;
 import org.apache.catalina.valves.AccessLogValve;
+import org.apache.juli.logging.Log;
+import org.apache.juli.logging.LogFactory;
 
 public class PeriodicAccessLogRotator implements LifecycleListener {
+
+    private static final Log log = LogFactory.getLog(PeriodicAccessLogRotator.class);
 
     private Scheduler scheduler;
     private String cronExpression = "0 * * * *"; // Default: top of every hour
@@ -40,7 +42,6 @@ public class PeriodicAccessLogRotator implements LifecycleListener {
 
     private void startPeriodicRotation(Engine engine) {
         scheduler = new Scheduler();
-
         // Schedule task using cron4j
         scheduler.schedule(cronExpression, () -> {
             try {
@@ -50,18 +51,18 @@ public class PeriodicAccessLogRotator implements LifecycleListener {
                 for (AccessLogValve valve : valves) {
                     // Force log file rotation
                     if (valve.isRotatable()) {
-                        engine.getLogger().info("Rotating log: " + valve.getPrefix() + valve.getSuffix());
+                        log.info("Rotating log: " + valve.getPrefix() + valve.getSuffix());
                         valve.rotate();
                     }
                 }
             } catch (Exception e) {
-                engine.getLogger().error("Error rotating AccessLogValves", e);
+                log.error("Error rotating AccessLogValves", e);
             }
         });
 
         scheduler.start();
-        if (engine.getLogger() != null) {
-            engine.getLogger().info("PeriodicAccessLogRotator started with cron expression: " + cronExpression);
+        if (log != null) {
+            log.info("PeriodicAccessLogRotator started with cron expression: " + cronExpression);
         }
     }
 
