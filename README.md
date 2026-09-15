@@ -6,6 +6,10 @@ configured below a Tomcat Engine on a cron schedule. It's useful to force
 access logs to be rotated at or before some specific period, for example, 
 to ensure all logs are available for external log processing frameworks.
 
+This isn't typically necessary, but there are low volume virtual hosts, there
+is no guarantee that their access logs will be rotated when necessary, as 
+built-in log rotation occurs as access log entries are written.
+
 The listener recursively scans the Engine, Hosts, and Contexts when the Engine
 starts. At each scheduled run, it calls `rotate()` on each rotatable access-log
 valve it finds.
