@@ -1,11 +1,11 @@
 plugins {
     id 'java-library'
-    id 'com.diffplug.spotless' version '8.10.1'
+    id 'com.diffplug.spotless' version '8.10.2'
     id 'com.gradleup.shadow' version '9.5.1'
 }
 
 group = 'org.fakebelieve'
-version = '1.0-SNAPSHOT'
+version = '1.0.0-SNAPSHOT'
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
@@ -16,14 +16,16 @@ repositories {
     mavenCentral()
 }
 
+// Match this to the Tomcat version you're actually deploying to.
 def tomcatVersion = '9.0.121'
+def cron4JVersion = '2.2.5'
 
 dependencies {
     compileOnly "org.apache.tomcat:tomcat-catalina:${tomcatVersion}"
     compileOnly "org.apache.tomcat:tomcat-coyote:${tomcatVersion}"
     compileOnly "org.apache.tomcat:tomcat-util:${tomcatVersion}"
 
-    implementation 'it.sauronsoftware.cron4j:cron4j:2.2.5'
+    implementation "it.sauronsoftware.cron4j:cron4j:${cron4JVersion}"
 
     testImplementation platform('org.junit:junit-bom:6.0.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
